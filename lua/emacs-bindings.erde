@@ -1,27 +1,52 @@
-vim.keymap.set('i', '<c-b>', '<Left>')
-vim.keymap.set('i', '<c-f>', '<Right>')
-vim.keymap.set('i', '<m-b>', '<c-o>b')
-vim.keymap.set('i', '<m-f>', '<c-o>w')
-vim.keymap.set('i', '<c-a>', '<Home>')
-vim.keymap.set('i', '<c-e>', '<End>')
+-- -----------------------------------------------------------------------------
+-- Helpers
+-- -----------------------------------------------------------------------------
 
-vim.keymap.set('i', '<c-d>', '<Delete>')
-vim.keymap.set('i', '<c-h>', '<BS>')
-vim.keymap.set('i', '<m-d>', '<c-o>dw')
-vim.keymap.set('i', '<m-backspace>', '<c-o>db')
-vim.keymap.set('i', '<c-u>', '<c-o>d^')
-vim.keymap.set('i', '<c-k>', '<c-o>d$')
+function getWordChars() {
+  local wordChars = {}
 
-vim.keymap.set('c', '<c-b>', '<Left>')
-vim.keymap.set('c', '<c-f>', '<Right>')
-vim.keymap.set('c', '<m-b>', '<c-f>bi<c-c>')
-vim.keymap.set('c', '<m-f>', '<c-f>wi<c-c>')
-vim.keymap.set('c', '<c-a>', '<Home>')
-vim.keymap.set('c', '<c-e>', '<End>')
+  for byte = string.byte('0'), string.byte('9') {
+    wordChars[string.char(byte)] = true
+  }
 
-vim.keymap.set('c', '<c-d>', '<Delete>')
-vim.keymap.set('c', '<c-h>', '<BS>')
-vim.keymap.set('c', '<m-d>', '<C-f>dw<C-c>')
-vim.keymap.set('c', '<m-backspace>', '<C-f>db<C-c>')
-vim.keymap.set('c', '<c-u>', '<C-f>d^<C-c>')
-vim.keymap.set('c', '<c-k>', '<C-f>d$A<C-c>')
+  for byte = string.byte('a'), string.byte('z') {
+    wordChars[string.char(byte)] = true
+  }
+
+  for byte = string.byte('A'), string.byte('Z') {
+    wordChars[string.char(byte)] = true
+  }
+
+  for i = 1, #vim.g.emacs_bindings_wordchars {
+    wordChars[vim.g.emacs_bindings_wordchars:sub(i, i)] = true
+  }
+
+  return wordChars
+}
+
+-- -----------------------------------------------------------------------------
+-- Module
+-- -----------------------------------------------------------------------------
+
+module function wordBack() {
+  local [_, lnum, col] = vim.fn.getpos('.')
+
+  if column == 1 {
+    return
+  }
+
+  local newcol = col
+  local line = vim.fn.getline('.')
+  local wordChars = getWordChars()
+
+  for i = col - 1, 1, -1 {
+    local char = line:sub(i, i)
+    newcol = i
+
+    if !wordChars[char:match('%a')] {
+      break
+    }
+  }
+
+  vim.fn.setpos('.', { 0, lnum, newcol, 0 })
+}
