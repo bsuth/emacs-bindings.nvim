@@ -78,7 +78,8 @@ vim
 ,
 '<m-f>'
 ,
-'<c-o>w'
+emacs
+.wordForward
 )
 vim
 .keymap

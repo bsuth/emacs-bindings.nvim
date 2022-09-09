@@ -2,19 +2,25 @@
 -- Helpers
 -- -----------------------------------------------------------------------------
 
+local CORE_WORD_CHARS = { _ = true }
+
+for byte = string.byte('0'), string.byte('9') {
+  CORE_WORD_CHARS[string.char(byte)] = true
+}
+
+for byte = string.byte('a'), string.byte('z') {
+  CORE_WORD_CHARS[string.char(byte)] = true
+}
+
+for byte = string.byte('A'), string.byte('Z') {
+  CORE_WORD_CHARS[string.char(byte)] = true
+}
+
 function getWordChars() {
   local wordChars = {}
 
-  for byte = string.byte('0'), string.byte('9') {
-    wordChars[string.char(byte)] = true
-  }
-
-  for byte = string.byte('a'), string.byte('z') {
-    wordChars[string.char(byte)] = true
-  }
-
-  for byte = string.byte('A'), string.byte('Z') {
-    wordChars[string.char(byte)] = true
+  for coreWordChar in pairs(CORE_WORD_CHARS) {
+    wordChars[coreWordChar] = true
   }
 
   for i = 1, #vim.g.emacs_bindings_wordchars {
@@ -29,24 +35,43 @@ function getWordChars() {
 -- -----------------------------------------------------------------------------
 
 module function wordBack() {
-  local [_, lnum, col] = vim.fn.getpos('.')
-
-  if column == 1 {
-    return
-  }
-
-  local newcol = col
-  local line = vim.fn.getline('.')
   local wordChars = getWordChars()
+  local [_, lnum, col] = vim.fn.getpos('.')
+  local line = vim.fn.getline('.')
 
-  for i = col - 1, 1, -1 {
-    local char = line:sub(i, i)
-    newcol = i
+  local newCol = col
+  local nextChar = line:sub(newCol - 1, newCol - 1)
 
-    if !wordChars[char:match('%a')] {
-      break
-    }
+  while nextChar && nextChar:match('%s') {
+    newCol -= 1
+    nextChar = line:sub(newCol - 1, newCol - 1)
   }
 
-  vim.fn.setpos('.', { 0, lnum, newcol, 0 })
+  while nextChar && wordChars[nextChar] {
+    newCol -= 1
+    nextChar = line:sub(newCol - 1, newCol - 1)
+  }
+
+  vim.fn.setpos('.', { 0, lnum, newCol, 0 })
+}
+
+module function wordForward() {
+  local wordChars = getWordChars()
+  local [_, lnum, col] = vim.fn.getpos('.')
+  local line = vim.fn.getline('.')
+
+  local newCol = col
+  local nextChar = line:sub(newCol + 1, newCol + 1)
+
+  while nextChar && wordChars[nextChar] {
+    newCol += 1
+    nextChar = line:sub(newCol + 1, newCol + 1)
+  }
+
+  while nextChar && nextChar:match('%s') {
+    newCol += 1
+    nextChar = line:sub(newCol + 1, newCol + 1)
+  }
+
+  vim.fn.setpos('.', { 0, lnum, newCol + 1, 0 })
 }
