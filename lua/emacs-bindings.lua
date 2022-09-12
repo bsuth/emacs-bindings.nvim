@@ -368,5 +368,47 @@ newCol
 }
 )
 end
-return { wordBack=wordBack,wordForward=wordForward }
+local
+function
+charDelete
+()
+local
+__ERDE_TMP_13__
+=
+vim
+.fn
+.getpos(
+'.'
+)
+local _ = __ERDE_TMP_13__[1]
+local _ = __ERDE_TMP_13__[2]
+local col = __ERDE_TMP_13__[3]
+if
+col
+<=
+#
+vim
+.fn
+.getline(
+'.'
+)
+then
+nvim_feedkeys(
+nvim_replace_termcodes(
+'<Delete>'
+,
+true
+,
+false
+,
+true
+)
+,
+'n'
+,
+false
+)
+end
+end
+return { wordBack=wordBack,wordForward=wordForward,charDelete=charDelete }
 -- __ERDE_COMPILED__

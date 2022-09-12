@@ -88,7 +88,8 @@ vim
 ,
 '<c-d>'
 ,
-'<Delete>'
+emacs
+.charDelete
 )
 vim
 .keymap
@@ -178,7 +179,8 @@ vim
 ,
 '<m-b>'
 ,
-'<c-f>bi<c-c>'
+emacs
+.wordBack
 )
 vim
 .keymap
@@ -187,7 +189,8 @@ vim
 ,
 '<m-f>'
 ,
-'<c-f>wi<c-c>'
+emacs
+.wordForward
 )
 vim
 .keymap

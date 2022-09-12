@@ -75,3 +75,10 @@ module function wordForward() {
 
   vim.fn.setpos('.', { 0, lnum, newCol + 1, 0 })
 }
+
+module function charDelete() {
+  local [_, _, col] = vim.fn.getpos('.')
+  if col <= #vim.fn.getline('.') {
+    nvim_feedkeys(nvim_replace_termcodes('<Delete>', true, false, true), 'n', false)
+  }
+}
