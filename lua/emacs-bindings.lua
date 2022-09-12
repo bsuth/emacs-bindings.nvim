@@ -174,7 +174,7 @@ newCol
 while
 newCol
 >
-0
+1
 and
 not
 wordChars
@@ -203,7 +203,7 @@ end
 while
 newCol
 >
-0
+1
 and
 wordChars
 [
@@ -370,7 +370,7 @@ newCol
 end
 local
 function
-charDelete
+charDeleteBack
 ()
 local
 __ERDE_TMP_13__
@@ -383,6 +383,43 @@ vim
 local _ = __ERDE_TMP_13__[1]
 local _ = __ERDE_TMP_13__[2]
 local col = __ERDE_TMP_13__[3]
+if
+col
+>
+1
+then
+nvim_feedkeys(
+nvim_replace_termcodes(
+'<BS>'
+,
+true
+,
+false
+,
+true
+)
+,
+'n'
+,
+false
+)
+end
+end
+local
+function
+charDeleteForward
+()
+local
+__ERDE_TMP_14__
+=
+vim
+.fn
+.getpos(
+'.'
+)
+local _ = __ERDE_TMP_14__[1]
+local _ = __ERDE_TMP_14__[2]
+local col = __ERDE_TMP_14__[3]
 if
 col
 <=
@@ -410,5 +447,5 @@ false
 )
 end
 end
-return { wordBack=wordBack,wordForward=wordForward,charDelete=charDelete }
+return { wordBack=wordBack,wordForward=wordForward,charDeleteBack=charDeleteBack,charDeleteForward=charDeleteForward }
 -- __ERDE_COMPILED__

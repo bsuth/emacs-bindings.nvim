@@ -42,12 +42,12 @@ module function wordBack() {
   local newCol = col
   local nextChar = line:sub(newCol - 1, newCol - 1)
 
-  while newCol > 0 && !wordChars[nextChar] {
+  while newCol > 1 && !wordChars[nextChar] {
     newCol -= 1
     nextChar = line:sub(newCol - 1, newCol - 1)
   }
 
-  while newCol > 0 && wordChars[nextChar] {
+  while newCol > 1 && wordChars[nextChar] {
     newCol -= 1
     nextChar = line:sub(newCol - 1, newCol - 1)
   }
@@ -76,7 +76,14 @@ module function wordForward() {
   vim.fn.setpos('.', { 0, lnum, newCol + 1, 0 })
 }
 
-module function charDelete() {
+module function charDeleteBack() {
+  local [_, _, col] = vim.fn.getpos('.')
+  if col > 1 {
+    nvim_feedkeys(nvim_replace_termcodes('<BS>', true, false, true), 'n', false)
+  }
+}
+
+module function charDeleteForward() {
   local [_, _, col] = vim.fn.getpos('.')
   if col <= #vim.fn.getline('.') {
     nvim_feedkeys(nvim_replace_termcodes('<Delete>', true, false, true), 'n', false)
