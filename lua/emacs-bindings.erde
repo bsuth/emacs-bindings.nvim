@@ -42,12 +42,12 @@ module function wordBack() {
   local newCol = col
   local nextChar = line:sub(newCol - 1, newCol - 1)
 
-  while nextChar && nextChar:match('%s') {
+  while newCol > 0 && !wordChars[nextChar] {
     newCol -= 1
     nextChar = line:sub(newCol - 1, newCol - 1)
   }
 
-  while nextChar && wordChars[nextChar] {
+  while newCol > 0 && wordChars[nextChar] {
     newCol -= 1
     nextChar = line:sub(newCol - 1, newCol - 1)
   }
@@ -63,12 +63,12 @@ module function wordForward() {
   local newCol = col
   local nextChar = line:sub(newCol + 1, newCol + 1)
 
-  while nextChar && wordChars[nextChar] {
+  while newCol < #line && wordChars[nextChar] {
     newCol += 1
     nextChar = line:sub(newCol + 1, newCol + 1)
   }
 
-  while nextChar && nextChar:match('%s') {
+  while newCol < #line && !wordChars[nextChar] {
     newCol += 1
     nextChar = line:sub(newCol + 1, newCol + 1)
   }
