@@ -108,7 +108,8 @@ vim
 ,
 '<m-d>'
 ,
-'<c-o>dw'
+emacs
+.wordDeleteForward
 )
 vim
 .keymap
@@ -117,7 +118,8 @@ vim
 ,
 '<m-backspace>'
 ,
-'<c-o>db'
+emacs
+.wordDeleteBack
 )
 vim
 .keymap

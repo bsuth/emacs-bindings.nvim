@@ -89,3 +89,46 @@ module function charDeleteForward() {
     nvim_feedkeys(nvim_replace_termcodes('<Delete>', true, false, true), 'n', false)
   }
 }
+
+module function wordDeleteForward() {
+  local wordChars = getWordChars()
+  local [_, lnum, col] = vim.fn.getpos('.')
+  local line = vim.fn.getline('.')
+
+  local newCol = col
+  local nextChar = line:sub(newCol + 1, newCol + 1)
+
+  while newCol < #line && !wordChars[nextChar] {
+    newCol += 1
+    nextChar = line:sub(newCol + 1, newCol + 1)
+  }
+
+  while newCol < #line && wordChars[nextChar] {
+    newCol += 1
+    nextChar = line:sub(newCol + 1, newCol + 1)
+  }
+
+  vim.fn.setline(lnum, line:sub(1, col - 1) .. line:sub(newCol + 1))
+}
+
+module function wordDeleteBack() {
+  local wordChars = getWordChars()
+  local [_, lnum, col] = vim.fn.getpos('.')
+  local line = vim.fn.getline('.')
+
+  local newCol = col
+  local nextChar = line:sub(newCol - 1, newCol - 1)
+
+  while newCol > 1 && !wordChars[nextChar] {
+    newCol -= 1
+    nextChar = line:sub(newCol - 1, newCol - 1)
+  }
+
+  while newCol > 1 && wordChars[nextChar] {
+    newCol -= 1
+    nextChar = line:sub(newCol - 1, newCol - 1)
+  }
+
+  vim.fn.setline(lnum, line:sub(1, newCol - 1) .. line:sub(col))
+  vim.fn.setpos('.', { 0, lnum, newCol, 0 })
+}
