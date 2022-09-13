@@ -1,8 +1,8 @@
 -- https://zsh.sourceforge.io/Doc/Release/Parameters.html#index-WORDCHARS
 
 -- config options:
--- vim.g.emacs_bindings.wordchars = ''
--- vim.g.emacs_bindings.traverselines = false
+-- vim.g.emacs_bindings.wordchars = '*?_-.[]~='
+-- vim.g.emacs_bindings.modes = 'ic'
 
 local emacs = require('emacs-bindings')
 
@@ -17,25 +17,24 @@ vim.keymap.set('i', '<c-b>', '<Left>')
 vim.keymap.set('i', '<c-f>', '<Right>')
 vim.keymap.set('i', '<c-a>', '<Home>')
 vim.keymap.set('i', '<c-e>', '<End>')
-vim.keymap.set('i', '<m-b>', emacs.wordBack)
-vim.keymap.set('i', '<m-f>', emacs.wordForward)
-vim.keymap.set('i', '<c-h>', emacs.charDeleteBack)
-vim.keymap.set('i', '<c-d>', emacs.charDeleteForward)
-vim.keymap.set('i', '<m-backspace>', emacs.wordDeleteBack)
-vim.keymap.set('i', '<m-d>', emacs.wordDeleteForward)
-vim.keymap.set('i', '<c-u>', emacs.lineDeleteBack)
-vim.keymap.set('i', '<c-k>', emacs.lineDeleteForward)
+vim.keymap.set('i', '<m-b>', emacs.moveWordBack)
+vim.keymap.set('i', '<m-f>', emacs.moveWordForward)
+vim.keymap.set('i', '<c-h>', emacs.deleteCharBack)
+vim.keymap.set('i', '<c-d>', emacs.deleteCharForward)
+vim.keymap.set('i', '<m-backspace>', emacs.deleteWordBack)
+vim.keymap.set('i', '<m-d>', emacs.deleteWordForward)
+vim.keymap.set('i', '<c-u>', emacs.deleteLineBack)
+vim.keymap.set('i', '<c-k>', emacs.deleteLineForward)
 
 vim.keymap.set('c', '<c-b>', '<Left>')
 vim.keymap.set('c', '<c-f>', '<Right>')
 vim.keymap.set('c', '<c-a>', '<Home>')
 vim.keymap.set('c', '<c-e>', '<End>')
-vim.keymap.set('c', '<m-b>', emacs.wordBack)
-vim.keymap.set('c', '<m-f>', emacs.wordForward)
-
-vim.keymap.set('c', '<c-d>', '<Delete>')
-vim.keymap.set('c', '<c-h>', '<BS>')
-vim.keymap.set('c', '<m-d>', '<C-f>dw<C-c>')
-vim.keymap.set('c', '<m-backspace>', '<C-f>db<C-c>')
-vim.keymap.set('c', '<c-u>', '<C-f>d^<C-c>')
-vim.keymap.set('c', '<c-k>', '<C-f>d$A<C-c>')
+vim.keymap.set('c', '<m-b>', emacs.moveWordBack)
+vim.keymap.set('c', '<m-f>', emacs.moveWordForward)
+vim.keymap.set('c', '<c-h>', emacs.deleteCharBack)
+vim.keymap.set('c', '<c-d>', emacs.deleteCharForward)
+vim.keymap.set('c', '<m-backspace>', emacs.deleteWordBack)
+vim.keymap.set('c', '<m-d>', emacs.deleteWordForward)
+vim.keymap.set('c', '<c-u>', emacs.deleteLineBack)
+vim.keymap.set('c', '<c-k>', emacs.deleteLineForward)
