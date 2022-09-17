@@ -63,5 +63,5 @@ a "word" (inspired by zsh's [WORDCHARS](https://zsh.sourceforge.io/Doc/Release/P
 By default, this will take the value of the env variable `WORDCHARS` and if empty default to `*?_-.[]~=`.
 
 ```lua
-vim.g.emacs_bindings_wordchars = '/\.[]'
+vim.g.emacs_bindings_wordchars = '[]/.'
 ```
