@@ -1,9 +1,3 @@
--- https://zsh.sourceforge.io/Doc/Release/Parameters.html#index-WORDCHARS
-
--- config options:
--- vim.g.emacs_bindings.wordchars = '*?_-.[]~='
--- vim.g.emacs_bindings.modes = 'ic'
-
 local emacs = require('emacs-bindings')
 
 if vim.g.loaded_emacs_bindings {
