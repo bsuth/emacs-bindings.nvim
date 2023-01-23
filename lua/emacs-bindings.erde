@@ -31,7 +31,7 @@ function getWordChars() {
 }
 
 function feedTermCodes(termCodes) {
-  nvim_feedkeys(nvim_replace_termcodes(termCodes, true, false, true), 'n', false)
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(termCodes, true, false, true), 'n', false)
 }
 
 function getWordBackCol(line, col) {

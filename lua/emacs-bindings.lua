@@ -130,8 +130,12 @@ local
 function
 feedTermCodes
 (termCodes)
-nvim_feedkeys(
-nvim_replace_termcodes(
+vim
+.api
+.nvim_feedkeys(
+vim
+.api
+.nvim_replace_termcodes(
 termCodes
 ,
 true
