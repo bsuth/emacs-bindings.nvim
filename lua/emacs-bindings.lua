@@ -1,9 +1,8 @@
-local
-CORE_WORD_CHARS
+local _MODULE = {}
+local CORE_WORD_CHARS
 =
 {
-_
-=
+_=
 true
 ,
 }
@@ -12,13 +11,17 @@ byte
 =
 string
 .byte(
+(
 '0'
 )
+)
 ,
 string
 .byte(
+(
 '9'
 )
+)
 do
 CORE_WORD_CHARS
 [
@@ -35,12 +38,16 @@ byte
 =
 string
 .byte(
+(
 'a'
 )
+)
 ,
 string
 .byte(
+(
 'z'
+)
 )
 do
 CORE_WORD_CHARS
@@ -58,12 +65,16 @@ byte
 =
 string
 .byte(
+(
 'A'
+)
 )
 ,
 string
 .byte(
+(
 'Z'
+)
 )
 do
 CORE_WORD_CHARS
@@ -78,23 +89,22 @@ true
 end
 local
 function
-getWordChars
+get_word_chars
 ()
-local
-wordChars
+local word_chars
 =
 {
 }
 for
-coreWordChar
+core_word_char
 in
 pairs(
 CORE_WORD_CHARS
 )
 do
-wordChars
+word_chars
 [
-coreWordChar
+core_word_char
 ]
 =
 true
@@ -109,7 +119,7 @@ vim
 .g
 .emacs_bindings_wordchars
 do
-wordChars
+word_chars
 [
 vim
 .g
@@ -124,19 +134,19 @@ i
 true
 end
 return
-wordChars
+word_chars
 end
 local
 function
-feedTermCodes
-(termCodes)
+feed_term_codes
+(term_codes)
 vim
 .api
 .nvim_feedkeys(
 vim
 .api
 .nvim_replace_termcodes(
-termCodes
+term_codes
 ,
 true
 ,
@@ -145,22 +155,21 @@ false
 true
 )
 ,
+(
 'n'
+)
 ,
 false
 )
 end
 local
 function
-getWordBackCol
+get_word_back_col
 (line,col)
-local
-wordChars
+local word_chars
 =
-getWordChars(
-)
-local
-nextChar
+get_word_chars()
+local next_char
 =
 line
 :sub(
@@ -178,9 +187,9 @@ col
 1
 and
 not
-wordChars
+word_chars
 [
-nextChar
+next_char
 ]
 do
 col
@@ -188,7 +197,7 @@ col
 col
 -
 1
-nextChar
+next_char
 =
 line
 :sub(
@@ -206,9 +215,9 @@ col
 >
 1
 and
-wordChars
+word_chars
 [
-nextChar
+next_char
 ]
 do
 col
@@ -216,7 +225,7 @@ col
 col
 -
 1
-nextChar
+next_char
 =
 line
 :sub(
@@ -234,15 +243,12 @@ col
 end
 local
 function
-getMoveWordForwardCol
+get_move_word_forward_col
 (line,col)
-local
-wordChars
+local word_chars
 =
-getWordChars(
-)
-local
-nextChar
+get_word_chars()
+local next_char
 =
 line
 :sub(
@@ -260,9 +266,9 @@ col
 #
 line
 and
-wordChars
+word_chars
 [
-nextChar
+next_char
 ]
 do
 col
@@ -270,7 +276,7 @@ col
 col
 +
 1
-nextChar
+next_char
 =
 line
 :sub(
@@ -290,9 +296,9 @@ col
 line
 and
 not
-wordChars
+word_chars
 [
-nextChar
+next_char
 ]
 do
 col
@@ -300,7 +306,7 @@ col
 col
 +
 1
-nextChar
+next_char
 =
 line
 :sub(
@@ -320,15 +326,12 @@ col
 end
 local
 function
-getDeleteWordForwardCol
+get_delete_word_forward_col
 (line,col)
-local
-wordChars
+local word_chars
 =
-getWordChars(
-)
-local
-nextChar
+get_word_chars()
+local next_char
 =
 line
 :sub(
@@ -347,9 +350,9 @@ col
 line
 and
 not
-wordChars
+word_chars
 [
-nextChar
+next_char
 ]
 do
 col
@@ -357,7 +360,7 @@ col
 col
 +
 1
-nextChar
+next_char
 =
 line
 :sub(
@@ -376,9 +379,9 @@ col
 #
 line
 and
-wordChars
+word_chars
 [
-nextChar
+next_char
 ]
 do
 col
@@ -386,7 +389,7 @@ col
 col
 +
 1
-nextChar
+next_char
 =
 line
 :sub(
@@ -406,38 +409,37 @@ col
 end
 local
 function
-moveWordBack
+move_word_back
 ()
 if
 vim
 .fn
-.mode(
-)
+.mode()
 ==
+(
 'c'
+)
 then
-local
-col
+local col
 =
 vim
 .fn
-.getcmdpos(
-)
-local
-line
+.getcmdpos()
+local line
 =
 vim
 .fn
-.getcmdline(
-)
-feedTermCodes(
+.getcmdline()
+feed_term_codes(
+(
 (
 '<Left>'
 )
+)
 :rep(
 col
 -
-getWordBackCol(
+get_word_back_col(
 line
 ,
 col
@@ -445,36 +447,43 @@ col
 )
 )
 else
-local
-__ERDE_TMP_13__
-=
+local _,lnum,col
+do
+local __ERDE_TMP_126__
+__ERDE_TMP_126__=
 vim
 .fn
 .getpos(
+(
 '.'
 )
-local _ = __ERDE_TMP_13__[1]
-local lnum = __ERDE_TMP_13__[2]
-local col = __ERDE_TMP_13__[3]
-local
-line
+)
+_ = __ERDE_TMP_126__[1]
+lnum = __ERDE_TMP_126__[2]
+col = __ERDE_TMP_126__[3]
+end
+local line
 =
 vim
 .fn
 .getline(
+(
 '.'
+)
 )
 vim
 .fn
 .setcharpos(
+(
 '.'
+)
 ,
 {
 0
 ,
 lnum
 ,
-getWordBackCol(
+get_word_back_col(
 line
 ,
 col
@@ -486,38 +495,38 @@ col
 )
 end
 end
+_MODULE.move_word_back = move_word_back
 local
 function
-moveWordForward
+move_word_forward
 ()
 if
 vim
 .fn
-.mode(
-)
+.mode()
 ==
+(
 'c'
+)
 then
-local
-col
+local col
 =
 vim
 .fn
-.getcmdpos(
-)
-local
-line
+.getcmdpos()
+local line
 =
 vim
 .fn
-.getcmdline(
-)
-feedTermCodes(
+.getcmdline()
+feed_term_codes(
+(
 (
 '<Right>'
 )
+)
 :rep(
-getMoveWordForwardCol(
+get_move_word_forward_col(
 line
 ,
 col
@@ -527,36 +536,43 @@ col
 )
 )
 else
-local
-__ERDE_TMP_14__
-=
+local _,lnum,col
+do
+local __ERDE_TMP_148__
+__ERDE_TMP_148__=
 vim
 .fn
 .getpos(
+(
 '.'
 )
-local _ = __ERDE_TMP_14__[1]
-local lnum = __ERDE_TMP_14__[2]
-local col = __ERDE_TMP_14__[3]
-local
-line
+)
+_ = __ERDE_TMP_148__[1]
+lnum = __ERDE_TMP_148__[2]
+col = __ERDE_TMP_148__[3]
+end
+local line
 =
 vim
 .fn
 .getline(
+(
 '.'
+)
 )
 vim
 .fn
 .setcharpos(
+(
 '.'
+)
 ,
 {
 0
 ,
 lnum
 ,
-getMoveWordForwardCol(
+get_move_word_forward_col(
 line
 ,
 col
@@ -568,113 +584,130 @@ col
 )
 end
 end
+_MODULE.move_word_forward = move_word_forward
 local
 function
-deleteCharBack
+delete_char_back
 ()
-local
-__ERDE_TMP_15__
-=
+local _,_,col
+do
+local __ERDE_TMP_159__
+__ERDE_TMP_159__=
 vim
 .fn
 .getpos(
+(
 '.'
 )
-local _ = __ERDE_TMP_15__[1]
-local _ = __ERDE_TMP_15__[2]
-local col = __ERDE_TMP_15__[3]
+)
+_ = __ERDE_TMP_159__[1]
+_ = __ERDE_TMP_159__[2]
+col = __ERDE_TMP_159__[3]
+end
 if
 vim
 .fn
-.mode(
-)
+.mode()
 ==
+(
 'c'
+)
 or
 col
 >
 1
 then
-feedTermCodes(
+feed_term_codes(
+(
 '<BS>'
+)
 )
 end
 end
+_MODULE.delete_char_back = delete_char_back
 local
 function
-deleteCharForward
+delete_char_forward
 ()
-local
-__ERDE_TMP_16__
-=
+local _,_,col
+do
+local __ERDE_TMP_167__
+__ERDE_TMP_167__=
 vim
 .fn
 .getpos(
+(
 '.'
 )
-local _ = __ERDE_TMP_16__[1]
-local _ = __ERDE_TMP_16__[2]
-local col = __ERDE_TMP_16__[3]
-local
-line
+)
+_ = __ERDE_TMP_167__[1]
+_ = __ERDE_TMP_167__[2]
+col = __ERDE_TMP_167__[3]
+end
+local line
 =
 vim
 .fn
 .getline(
+(
 '.'
+)
 )
 if
 vim
 .fn
-.mode(
-)
+.mode()
 ==
+(
 'c'
+)
 or
 col
 <=
 #
 line
 then
-feedTermCodes(
+feed_term_codes(
+(
 '<Delete>'
+)
 )
 end
 end
+_MODULE.delete_char_forward = delete_char_forward
 local
 function
-deleteWordBack
+delete_word_back
 ()
 if
 vim
 .fn
-.mode(
-)
+.mode()
 ==
+(
 'c'
+)
 then
-local
-col
+local col
 =
 vim
 .fn
-.getcmdpos(
-)
-local
-line
+.getcmdpos()
+local line
 =
 vim
 .fn
-.getcmdline(
-)
-feedTermCodes(
+.getcmdline()
+feed_term_codes(
+(
 (
 '<BS>'
+)
 )
 :rep(
 col
 -
-getWordBackCol(
+get_word_back_col(
 line
 ,
 col
@@ -682,29 +715,33 @@ col
 )
 )
 else
-local
-__ERDE_TMP_17__
-=
+local _,lnum,col
+do
+local __ERDE_TMP_189__
+__ERDE_TMP_189__=
 vim
 .fn
 .getpos(
+(
 '.'
 )
-local _ = __ERDE_TMP_17__[1]
-local lnum = __ERDE_TMP_17__[2]
-local col = __ERDE_TMP_17__[3]
-local
-line
+)
+_ = __ERDE_TMP_189__[1]
+lnum = __ERDE_TMP_189__[2]
+col = __ERDE_TMP_189__[3]
+end
+local line
 =
 vim
 .fn
 .getline(
+(
 '.'
 )
-local
-newCol
+)
+local new_col
 =
-getWordBackCol(
+get_word_back_col(
 line
 ,
 col
@@ -718,7 +755,7 @@ line
 :sub(
 1
 ,
-newCol
+new_col
 -
 1
 )
@@ -731,14 +768,16 @@ col
 vim
 .fn
 .setcharpos(
+(
 '.'
+)
 ,
 {
 0
 ,
 lnum
 ,
-newCol
+new_col
 ,
 0
 ,
@@ -746,38 +785,38 @@ newCol
 )
 end
 end
+_MODULE.delete_word_back = delete_word_back
 local
 function
-deleteWordForward
+delete_word_forward
 ()
 if
 vim
 .fn
-.mode(
-)
+.mode()
 ==
+(
 'c'
+)
 then
-local
-col
+local col
 =
 vim
 .fn
-.getcmdpos(
-)
-local
-line
+.getcmdpos()
+local line
 =
 vim
 .fn
-.getcmdline(
-)
-feedTermCodes(
+.getcmdline()
+feed_term_codes(
+(
 (
 '<Delete>'
 )
+)
 :rep(
-getDeleteWordForwardCol(
+get_delete_word_forward_col(
 line
 ,
 col
@@ -787,29 +826,33 @@ col
 )
 )
 else
-local
-__ERDE_TMP_18__
-=
+local _,lnum,col
+do
+local __ERDE_TMP_218__
+__ERDE_TMP_218__=
 vim
 .fn
 .getpos(
+(
 '.'
 )
-local _ = __ERDE_TMP_18__[1]
-local lnum = __ERDE_TMP_18__[2]
-local col = __ERDE_TMP_18__[3]
-local
-line
+)
+_ = __ERDE_TMP_218__[1]
+lnum = __ERDE_TMP_218__[2]
+col = __ERDE_TMP_218__[3]
+end
+local line
 =
 vim
 .fn
 .getline(
+(
 '.'
 )
-local
-newCol
+)
+local new_col
 =
-getDeleteWordForwardCol(
+get_delete_word_forward_col(
 line
 ,
 col
@@ -830,53 +873,61 @@ col
 ..
 line
 :sub(
-newCol
+new_col
 )
 )
 end
 end
+_MODULE.delete_word_forward = delete_word_forward
 local
 function
-deleteLineBack
+delete_line_back
 ()
 if
 vim
 .fn
-.mode(
-)
+.mode()
 ==
+(
 'c'
+)
 then
-feedTermCodes(
+feed_term_codes(
+(
 (
 '<BS>'
+)
 )
 :rep(
 vim
 .fn
-.getcmdpos(
-)
+.getcmdpos()
 )
 )
 else
-local
-__ERDE_TMP_19__
-=
+local _,lnum,col
+do
+local __ERDE_TMP_238__
+__ERDE_TMP_238__=
 vim
 .fn
 .getpos(
+(
 '.'
 )
-local _ = __ERDE_TMP_19__[1]
-local lnum = __ERDE_TMP_19__[2]
-local col = __ERDE_TMP_19__[3]
-local
-line
+)
+_ = __ERDE_TMP_238__[1]
+lnum = __ERDE_TMP_238__[2]
+col = __ERDE_TMP_238__[3]
+end
+local line
 =
 vim
 .fn
 .getline(
+(
 '.'
+)
 )
 vim
 .fn
@@ -891,7 +942,9 @@ col
 vim
 .fn
 .setcharpos(
+(
 '.'
+)
 ,
 {
 0
@@ -906,35 +959,35 @@ lnum
 )
 end
 end
+_MODULE.delete_line_back = delete_line_back
 local
 function
-deleteLineForward
+delete_line_forward
 ()
 if
 vim
 .fn
-.mode(
-)
+.mode()
 ==
+(
 'c'
+)
 then
-local
-col
+local col
 =
 vim
 .fn
-.getcmdpos(
-)
-local
-line
+.getcmdpos()
+local line
 =
 vim
 .fn
-.getcmdline(
-)
-feedTermCodes(
+.getcmdline()
+feed_term_codes(
+(
 (
 '<Delete>'
+)
 )
 :rep(
 #
@@ -946,24 +999,29 @@ col
 )
 )
 else
-local
-__ERDE_TMP_20__
-=
+local _,lnum,col
+do
+local __ERDE_TMP_259__
+__ERDE_TMP_259__=
 vim
 .fn
 .getpos(
+(
 '.'
 )
-local _ = __ERDE_TMP_20__[1]
-local lnum = __ERDE_TMP_20__[2]
-local col = __ERDE_TMP_20__[3]
-local
-line
+)
+_ = __ERDE_TMP_259__[1]
+lnum = __ERDE_TMP_259__[2]
+col = __ERDE_TMP_259__[3]
+end
+local line
 =
 vim
 .fn
 .getline(
+(
 '.'
+)
 )
 vim
 .fn
@@ -981,5 +1039,7 @@ col
 )
 end
 end
-return { moveWordBack=moveWordBack,moveWordForward=moveWordForward,deleteCharBack=deleteCharBack,deleteCharForward=deleteCharForward,deleteWordBack=deleteWordBack,deleteWordForward=deleteWordForward,deleteLineBack=deleteLineBack,deleteLineForward=deleteLineForward }
+_MODULE.delete_line_forward = delete_line_forward
+return _MODULE
+-- Compiled with Erde 0.6.0-1
 -- __ERDE_COMPILED__

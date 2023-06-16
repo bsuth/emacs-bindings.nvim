@@ -16,70 +16,70 @@ for byte = string.byte('A'), string.byte('Z') {
   CORE_WORD_CHARS[string.char(byte)] = true
 }
 
-local function getWordChars() {
-  local wordChars = {}
+local function get_word_chars() {
+  local word_chars = {}
 
-  for coreWordChar in pairs(CORE_WORD_CHARS) {
-    wordChars[coreWordChar] = true
+  for core_word_char in pairs(CORE_WORD_CHARS) {
+    word_chars[core_word_char] = true
   }
 
   for i = 1, #vim.g.emacs_bindings_wordchars {
-    wordChars[vim.g.emacs_bindings_wordchars:sub(i, i)] = true
+    word_chars[vim.g.emacs_bindings_wordchars:sub(i, i)] = true
   }
 
-  return wordChars
+  return word_chars
 }
 
-local function feedTermCodes(termCodes) {
-  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(termCodes, true, false, true), 'n', false)
+local function feed_term_codes(term_codes) {
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(term_codes, true, false, true), 'n', false)
 }
 
-local function getWordBackCol(line, col) {
-  local wordChars = getWordChars()
-  local nextChar = line:sub(col - 1, col - 1)
+local function get_word_back_col(line, col) {
+  local word_chars = get_word_chars()
+  local next_char = line:sub(col - 1, col - 1)
 
-  while col > 1 && !wordChars[nextChar] {
+  while col > 1 && !word_chars[next_char] {
     col -= 1
-    nextChar = line:sub(col - 1, col - 1)
+    next_char = line:sub(col - 1, col - 1)
   }
 
-  while col > 1 && wordChars[nextChar] {
+  while col > 1 && word_chars[next_char] {
     col -= 1
-    nextChar = line:sub(col - 1, col - 1)
+    next_char = line:sub(col - 1, col - 1)
   }
 
   return col
 }
 
-local function getMoveWordForwardCol(line, col) {
-  local wordChars = getWordChars()
-  local nextChar = line:sub(col + 1, col + 1)
+local function get_move_word_forward_col(line, col) {
+  local word_chars = get_word_chars()
+  local next_char = line:sub(col + 1, col + 1)
 
-  while col < #line && wordChars[nextChar] {
+  while col < #line && word_chars[next_char] {
     col += 1
-    nextChar = line:sub(col + 1, col + 1)
+    next_char = line:sub(col + 1, col + 1)
   }
 
-  while col < #line && !wordChars[nextChar] {
+  while col < #line && !word_chars[next_char] {
     col += 1
-    nextChar = line:sub(col + 1, col + 1)
+    next_char = line:sub(col + 1, col + 1)
   }
 
   return col + 1
 }
 
-local function getDeleteWordForwardCol(line, col) {
-  local wordChars = getWordChars()
-  local nextChar = line:sub(col + 1, col + 1)
+local function get_delete_word_forward_col(line, col) {
+  local word_chars = get_word_chars()
+  local next_char = line:sub(col + 1, col + 1)
 
-  while col < #line && !wordChars[nextChar] {
+  while col < #line && !word_chars[next_char] {
     col += 1
-    nextChar = line:sub(col + 1, col + 1)
+    next_char = line:sub(col + 1, col + 1)
   }
 
-  while col < #line && wordChars[nextChar] {
+  while col < #line && word_chars[next_char] {
     col += 1
-    nextChar = line:sub(col + 1, col + 1)
+    next_char = line:sub(col + 1, col + 1)
   }
 
   return col + 1
@@ -89,75 +89,75 @@ local function getDeleteWordForwardCol(line, col) {
 -- Module
 -- -----------------------------------------------------------------------------
 
-module function moveWordBack() {
+module function move_word_back() {
   if vim.fn.mode() == 'c' {
     local col = vim.fn.getcmdpos()
     local line = vim.fn.getcmdline()
-    feedTermCodes(('<Left>'):rep(col - getWordBackCol(line, col)))
+    feed_term_codes(('<Left>'):rep(col - get_word_back_col(line, col)))
   } else {
     local [_, lnum, col] = vim.fn.getpos('.')
     local line = vim.fn.getline('.')
-    vim.fn.setcharpos('.', { 0, lnum, getWordBackCol(line, col), 0 })
+    vim.fn.setcharpos('.', { 0, lnum, get_word_back_col(line, col), 0 })
   }
 }
 
-module function moveWordForward() {
+module function move_word_forward() {
   if vim.fn.mode() == 'c' {
     local col = vim.fn.getcmdpos()
     local line = vim.fn.getcmdline()
-    feedTermCodes(('<Right>'):rep(getMoveWordForwardCol(line, col) - col))
+    feed_term_codes(('<Right>'):rep(get_move_word_forward_col(line, col) - col))
   } else {
     local [_, lnum, col] = vim.fn.getpos('.')
     local line = vim.fn.getline('.')
-    vim.fn.setcharpos('.', { 0, lnum, getMoveWordForwardCol(line, col), 0 })
+    vim.fn.setcharpos('.', { 0, lnum, get_move_word_forward_col(line, col), 0 })
   }
 }
 
-module function deleteCharBack() {
+module function delete_char_back() {
   local [_, _, col] = vim.fn.getpos('.')
   if vim.fn.mode() == 'c' || col > 1 {
-    feedTermCodes('<BS>')
+    feed_term_codes('<BS>')
   }
 }
 
-module function deleteCharForward() {
+module function delete_char_forward() {
   local [_, _, col] = vim.fn.getpos('.')
   local line = vim.fn.getline('.')
   if vim.fn.mode() == 'c' || col <= #line {
-    feedTermCodes('<Delete>')
+    feed_term_codes('<Delete>')
   }
 }
 
-module function deleteWordBack() {
+module function delete_word_back() {
   if vim.fn.mode() == 'c' {
     local col = vim.fn.getcmdpos()
     local line = vim.fn.getcmdline()
-    feedTermCodes(('<BS>'):rep(col - getWordBackCol(line, col)))
+    feed_term_codes(('<BS>'):rep(col - get_word_back_col(line, col)))
   } else {
     local [_, lnum, col] = vim.fn.getpos('.')
     local line = vim.fn.getline('.')
-    local newCol = getWordBackCol(line, col)
-    vim.fn.setline(lnum, line:sub(1, newCol - 1) .. line:sub(col))
-    vim.fn.setcharpos('.', { 0, lnum, newCol, 0 })
+    local new_col = get_word_back_col(line, col)
+    vim.fn.setline(lnum, line:sub(1, new_col - 1) .. line:sub(col))
+    vim.fn.setcharpos('.', { 0, lnum, new_col, 0 })
   }
 }
 
-module function deleteWordForward() {
+module function delete_word_forward() {
   if vim.fn.mode() == 'c' {
     local col = vim.fn.getcmdpos()
     local line = vim.fn.getcmdline()
-    feedTermCodes(('<Delete>'):rep(getDeleteWordForwardCol(line, col) - col))
+    feed_term_codes(('<Delete>'):rep(get_delete_word_forward_col(line, col) - col))
   } else {
     local [_, lnum, col] = vim.fn.getpos('.')
     local line = vim.fn.getline('.')
-    local newCol = getDeleteWordForwardCol(line, col)
-    vim.fn.setline(lnum, line:sub(1, col - 1) .. line:sub(newCol))
+    local new_col = get_delete_word_forward_col(line, col)
+    vim.fn.setline(lnum, line:sub(1, col - 1) .. line:sub(new_col))
   }
 }
 
-module function deleteLineBack() {
+module function delete_line_back() {
   if vim.fn.mode() == 'c' {
-    feedTermCodes(('<BS>'):rep(vim.fn.getcmdpos()))
+    feed_term_codes(('<BS>'):rep(vim.fn.getcmdpos()))
   } else {
     local [_, lnum, col] = vim.fn.getpos('.')
     local line = vim.fn.getline('.')
@@ -166,11 +166,11 @@ module function deleteLineBack() {
   }
 }
 
-module function deleteLineForward() {
+module function delete_line_forward() {
   if vim.fn.mode() == 'c' {
     local col = vim.fn.getcmdpos()
     local line = vim.fn.getcmdline()
-    feedTermCodes(('<Delete>'):rep(#line - col + 1))
+    feed_term_codes(('<Delete>'):rep(#line - col + 1))
   } else {
     local [_, lnum, col] = vim.fn.getpos('.')
     local line = vim.fn.getline('.')
