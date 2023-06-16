@@ -16,7 +16,7 @@ for byte = string.byte('A'), string.byte('Z') {
   CORE_WORD_CHARS[string.char(byte)] = true
 }
 
-function getWordChars() {
+local function getWordChars() {
   local wordChars = {}
 
   for coreWordChar in pairs(CORE_WORD_CHARS) {
@@ -30,11 +30,11 @@ function getWordChars() {
   return wordChars
 }
 
-function feedTermCodes(termCodes) {
+local function feedTermCodes(termCodes) {
   vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(termCodes, true, false, true), 'n', false)
 }
 
-function getWordBackCol(line, col) {
+local function getWordBackCol(line, col) {
   local wordChars = getWordChars()
   local nextChar = line:sub(col - 1, col - 1)
 
@@ -51,7 +51,7 @@ function getWordBackCol(line, col) {
   return col
 }
 
-function getMoveWordForwardCol(line, col) {
+local function getMoveWordForwardCol(line, col) {
   local wordChars = getWordChars()
   local nextChar = line:sub(col + 1, col + 1)
 
@@ -68,7 +68,7 @@ function getMoveWordForwardCol(line, col) {
   return col + 1
 }
 
-function getDeleteWordForwardCol(line, col) {
+local function getDeleteWordForwardCol(line, col) {
   local wordChars = getWordChars()
   local nextChar = line:sub(col + 1, col + 1)
 
